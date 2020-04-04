@@ -17,7 +17,7 @@ public class MovieController {
     }
 
     @PostMapping
-    ResponseEntity<Object> createMovie(@RequestBody Movie movie){
+    ResponseEntity<Object> createMovie(@RequestBody Movie movie) {
         return ResponseEntity.ok(movieService.createMovie(movie));
     }
 
@@ -26,10 +26,21 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
-@GetMapping("/{id}")
-    ResponseEntity<Movie> getMovieById(Long id){
+    @GetMapping("/{id}")
+    ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMovieById(id));
 
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Object> deleteMovieById(@PathVariable Long id) {
+        boolean expected = movieService.deleteById(id);
+        if (expected) {
+            return ResponseEntity.ok(null);
+        } else {
+           return ResponseEntity.badRequest().body("not found");
+        }
+    }
 }
 
-}
+

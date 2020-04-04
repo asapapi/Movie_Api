@@ -20,9 +20,9 @@ import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +35,7 @@ public class MovieControllerTest {
 
     @MockBean
     MovieService movieService;
+    MovieRepo movieRepo;
 
 
 
@@ -74,14 +75,27 @@ public class MovieControllerTest {
         ArrayList<Movie> listOfMovies = new ArrayList<>();
         listOfMovies.add(expected);
 
-        when(movieService.getMovieById(1l)).thenReturn(expected);
+        when(movieService.getMovieById(4l)).thenReturn(expected);
 
 
         mvc.perform(get("/api/movies/4").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(4l))
+                .andExpect(jsonPath("$.id").value(expected.getId()))
                 .andExpect(jsonPath("$.movie").value(expected.getMovie()));
 
+    }
+
+    @Test
+    void deleteMovieById() throws Exception{
+        Movie expected = new Movie(1l, "Jackass5");
+        when(movieService.deleteById(ArgumentMatchers.any(Long.class))).thenReturn(true);
+
+
+        mvc.perform(delete("/api/jokes/1").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+        verify(movieRepo).deleteById(1l);
     }
 }

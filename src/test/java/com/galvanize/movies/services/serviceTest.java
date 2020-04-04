@@ -44,8 +44,9 @@ public class serviceTest {
         Movie movie = new Movie(1l, "jackass4");
         movieRepo.save(movie);
 
-        Movie actual = movieService.getMovieById(movie.getId());
+        boolean actual = movieService.deleteById(movie.getId());
 
-        assertEquals(movie.getMovie(),actual.getMovie());
+        assertEquals(true, actual);
+
     }
 }

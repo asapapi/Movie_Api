@@ -27,4 +27,9 @@ public class MovieService {
         Optional<Movie> optionalMovie = movieRepo.findById(id);
         return optionalMovie.orElse(null);
     }
+
+    public boolean deleteById(long id) {
+        movieRepo.deleteById(id);
+        return true;
+    }
 }
