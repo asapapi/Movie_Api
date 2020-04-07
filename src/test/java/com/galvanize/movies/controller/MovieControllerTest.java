@@ -38,8 +38,6 @@ public class MovieControllerTest {
     MovieRepo movieRepo;
 
 
-
-
     @Test
     void createdMovie() throws Exception {
         Movie movie1 = new Movie(1l, "Jackass");
@@ -54,9 +52,10 @@ public class MovieControllerTest {
 
 
     }
+
     @Test
-    void getMovieRequest() throws Exception{
-        Movie expected = new  Movie(1l, "jackass part two");
+    void getMovieRequest() throws Exception {
+        Movie expected = new Movie(1l, "jackass part two");
         ArrayList<Movie> expectedListOfMovies = new ArrayList<>();
         expectedListOfMovies.add(expected);
 
@@ -65,13 +64,14 @@ public class MovieControllerTest {
         mvc.perform(get("/api/movies").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$",hasSize(expectedListOfMovies.size())));
-                //.andExpect(jsonPath("$[0].movie").value(expected.getMovie()));
+                .andExpect(jsonPath("$", hasSize(expectedListOfMovies.size())));
+        //.andExpect(jsonPath("$[0].movie").value(expected.getMovie()));
 
     }
+
     @Test
-    void getMovieById() throws Exception{
-        Movie expected = new Movie(4l,"Jackass 2.0");
+    void getMovieById() throws Exception {
+        Movie expected = new Movie(4l, "Jackass 2.0");
         ArrayList<Movie> listOfMovies = new ArrayList<>();
         listOfMovies.add(expected);
 
@@ -87,15 +87,15 @@ public class MovieControllerTest {
     }
 
     @Test
-    void deleteMovieById() throws Exception{
+    void deleteMovieById() throws Exception {
         Movie expected = new Movie(1l, "Jackass5");
         when(movieService.deleteById(ArgumentMatchers.any(Long.class))).thenReturn(true);
 
 
-        mvc.perform(delete("/api/jokes/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(delete("/api/movies/1").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
-        verify(movieRepo).deleteById(1l);
+        verify(movieService).deleteById(1l);
     }
 }

@@ -41,12 +41,20 @@ public class serviceTest {
 
     @Test
     void ableToReturnById(){
-        Movie movie = new Movie(1l, "jackass4");
-        movieRepo.save(movie);
+      Movie movie = movieService.createMovie(new Movie(1l,"jackass5"));
 
         boolean actual = movieService.deleteById(movie.getId());
 
         assertEquals(true, actual);
+
+    }
+    @Test
+    void deleteById(){
+        Movie movie = movieService.createMovie(new Movie(1l,"jackass 6"));
+        boolean actual = movieService.deleteById(movie.getId());
+
+        assertEquals(true, actual);
+
 
     }
 }
